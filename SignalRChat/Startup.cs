@@ -58,6 +58,7 @@ namespace SignalRChat
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("/chatHub");
+                routes.MapHub<StreamHub>("/streamHub");
             });
             app.UseMvc();
         }

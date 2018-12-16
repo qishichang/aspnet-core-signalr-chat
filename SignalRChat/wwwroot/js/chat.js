@@ -26,4 +26,37 @@ document.getElementById("sendButton").addEventListener("click", function (event)
         return console.error(err.toString());
     });
     event.preventDefault();
-})
+});
+
+
+var streamConnection = new signalR.HubConnectionBuilder()
+                    .withUrl("/streamHub")
+                    .withHubProtocol(new signalR.protocols.msgpack.MessagePackHubProtocol())
+                    .build();
+
+streamConnection.start().catch(function (err) {
+    return console.error(err.toString());
+});
+
+document.getElementById("countdownButton").addEventListener("click", function (event) {
+    var from = document.getElementById("countdownInput").value;
+    streamConnection.stream("Counter", Number(from), 500)
+        .subscribe({
+            next: (item) => {
+                var li = document.createElement("li");
+                li.textContent = item;
+                document.getElementById("messagesList").appendChild(li);
+            },
+            complete: () => {
+                var li = document.createElement("li");
+                li.textContent = "Stream completed";
+                document.getElementById("messagesList").appendChild(li);
+            },
+            error: (err) => {
+                var li = document.createElement("li");
+                li.textContent = err;
+                document.getElementById("messagesList").appendChild(li);
+            }
+        });
+    event.preventDefault();
+});
