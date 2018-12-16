@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace SignalRChat.Hubs
 {
-    public class ChatHub : Hub
+    public class ChatHub : Hub<IChatClient>
     {
         public async Task SendMessage(ChatMessage chatMessage)
         {
-            await Clients.All.SendAsync("ReceiveMessage", chatMessage);
+            //await Clients.All.SendAsync("ReceiveMessage", chatMessage);
+            await Clients.All.ReceiveMessage(chatMessage);
         }
     }
 }
