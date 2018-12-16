@@ -60,3 +60,17 @@ document.getElementById("countdownButton").addEventListener("click", function (e
         });
     event.preventDefault();
 });
+
+
+document.getElementById("sendRestButton").addEventListener("click", function (event) {
+    var user = document.getElementById("userRestInput").value;
+    var message = document.getElementById("messageRestInput").value;
+    fetch("api/message", {
+        method: "post",
+        body: JSON.stringify({ sender: user, message: message, sendTime: new Date() }),
+        headers: {
+            "content-type": "application/json"
+        }
+    });
+    event.preventDefault();
+});
